@@ -21,7 +21,7 @@ function createBot() {
         port: 45056,
         username: 'Souls247Bot',
         // Change this version if you use a different server version
-        version: '26.1.2' 
+        version: false
     });
 
     bot.on('spawn', () => {
