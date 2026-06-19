@@ -21,9 +21,9 @@ function createBot() {
         port: 45056,
         username: 'Souls247Bot',
         version: false,
-        checkTimeoutInterval: 10000 // Force check every 10 seconds
+        hideErrors: false,
+        checkTimeoutInterval: 10000
     });
-
     bot.on('spawn', () => {
         console.log('🤖 Bot has successfully infiltrated Aternos!');
         
