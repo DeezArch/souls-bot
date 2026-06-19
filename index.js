@@ -1,7 +1,7 @@
 const mineflayer = require('mineflayer');
 const http = require('http');
 
-// Web server to keep the cloud instance awake
+// This keeps the Railway container "awake"
 const server = http.createServer((req, res) => {
     res.writeHead(200, { 'Content-Type': 'text/plain' });
     res.end('Bot is running');
@@ -12,17 +12,17 @@ function createBot() {
     console.log('Attempting to connect to Aternos...');
     
     const bot = mineflayer.createBot({
-        host: 'bluegill.aternos.host',
-        port: 45056,
+        host: 'inconnu.aternos.host', // UPDATE THIS to match your current DynIP
+        port: 45056,                  // UPDATE THIS to match your current Port
         username: 'Souls247Bot',
-        version: false, // MANDATORY: This stops the crash and auto-detects version
-        auth: 'offline', // Ensures it works on your "Cracked" server
+        version: false,               // Crucial: Auto-detects the version
+        auth: 'offline',              // Required for Aternos "Cracked" servers
         checkTimeoutInterval: 15000 
     });
 
-    // This logs the reason if the server kicks the bot
+    // Logs the exact reason if the server rejects the connection
     bot.on('kicked', (reason) => {
-        console.log('❌ BOT KICKED BY SERVER. Reason:', reason);
+        console.log('❌ BOT KICKED BY SERVER. Reason:', JSON.stringify(reason));
     });
 
     bot.on('error', (err) => {
