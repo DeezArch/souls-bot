@@ -7,7 +7,6 @@ const server = http.createServer((req, res) => {
     res.end('Souls247Bot is awake and keeping the world alive!\n');
 });
 
-// Render automatically assigns a PORT environment variable, or defaults to 3000
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
     console.log(`🌍 Web server is listening on port ${PORT}`);
@@ -15,6 +14,8 @@ server.listen(PORT, () => {
 
 // --- 2. Your Minecraft Bot ---
 function createBot() {
+    console.log('Attempting to connect to Aternos...');
+    
     const bot = mineflayer.createBot({
         host: 'bluegill.aternos.host',
         port: 45056,
@@ -25,7 +26,6 @@ function createBot() {
     bot.on('spawn', () => {
         console.log('🤖 Bot has successfully infiltrated Aternos!');
         
-        // Loop 1: Look around randomly every 12 seconds to mimic human activity
         setInterval(() => {
             if (!bot.entity) return;
             const yaw = (Math.random() * 360 - 180) * (Math.PI / 180);
@@ -33,7 +33,6 @@ function createBot() {
             bot.look(yaw, pitch, true);
         }, 12000);
 
-        // Loop 2: Micro-movement routine every 35 seconds to reset AFK timers
         setInterval(() => {
             if (!bot.entity) return;
             const actions = ['forward', 'back', 'sneak', 'jump'];
@@ -51,7 +50,6 @@ function createBot() {
             }
         }, 35000);
 
-        // Loop 3: Periodic chat heartbeats every 5 minutes to stay active
         setInterval(() => {
             bot.chat("Keeping the world awake! ☀️");
         }, 300000);
@@ -62,7 +60,9 @@ function createBot() {
         setTimeout(createBot, 20000);
     });
 
-    bot.on('error', (err) => console.log('❌ Error occurred:', err));
+    bot.on('error', (err) => {
+        console.log('❌ CRITICAL ERROR:', err.message);
+    });
 }
 
 createBot();
