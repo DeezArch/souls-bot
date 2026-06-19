@@ -1,7 +1,7 @@
 const mineflayer = require('mineflayer');
 const http = require('http');
 
-// Web server to keep Railway/Render alive
+// Web server to keep the cloud instance awake
 const server = http.createServer((req, res) => {
     res.writeHead(200, { 'Content-Type': 'text/plain' });
     res.end('Bot is running');
@@ -15,13 +15,14 @@ function createBot() {
         host: 'bluegill.aternos.host',
         port: 45056,
         username: 'Souls247Bot',
-        version: '26.1.2', // Keep this set to your server version
+        version: false, // MANDATORY: This stops the crash and auto-detects version
+        auth: 'offline', // Ensures it works on your "Cracked" server
         checkTimeoutInterval: 15000 
     });
 
-    // CRITICAL: This will tell us exactly why it disconnects
+    // This logs the reason if the server kicks the bot
     bot.on('kicked', (reason) => {
-        console.log('❌ BOT KICKED BY SERVER. Reason JSON:', reason);
+        console.log('❌ BOT KICKED BY SERVER. Reason:', reason);
     });
 
     bot.on('error', (err) => {
