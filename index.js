@@ -20,8 +20,8 @@ function createBot() {
         host: 'bluegill.aternos.host',
         port: 45056,
         username: 'Souls247Bot',
-        // Change this version if you use a different server version
-        version: false
+        version: false,
+        checkTimeoutInterval: 10000 // Force check every 10 seconds
     });
 
     bot.on('spawn', () => {
