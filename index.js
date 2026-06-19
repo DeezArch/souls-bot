@@ -16,7 +16,8 @@ server.listen(PORT, () => {
 // --- 2. Your Minecraft Bot ---
 function createBot() {
     const bot = mineflayer.createBot({
-        host: 'SoulSMP-OqYJ.aternos.me',
+        host: 'bluegill.aternos.host',
+        port: 45056,
         username: 'Souls247Bot',
         version: false
     });
