@@ -1,18 +1,13 @@
 const mineflayer = require('mineflayer');
 const http = require('http');
 
-// --- 1. Web Server to keep Render awake ---
+// Web server to keep Railway/Render alive
 const server = http.createServer((req, res) => {
     res.writeHead(200, { 'Content-Type': 'text/plain' });
-    res.end('Souls247Bot is awake and keeping the world alive!\n');
+    res.end('Bot is running');
 });
+server.listen(process.env.PORT || 8080);
 
-const PORT = process.env.PORT || 3000;
-server.listen(PORT, () => {
-    console.log(`🌍 Web server is listening on port ${PORT}`);
-});
-
-// --- 2. Your Minecraft Bot ---
 function createBot() {
     console.log('Attempting to connect to Aternos...');
     
@@ -20,49 +15,27 @@ function createBot() {
         host: 'bluegill.aternos.host',
         port: 45056,
         username: 'Souls247Bot',
-        version: false,
-        hideErrors: false,
-        checkTimeoutInterval: 10000
-    });
-    bot.on('spawn', () => {
-        console.log('🤖 Bot has successfully infiltrated Aternos!');
-        
-        setInterval(() => {
-            if (!bot.entity) return;
-            const yaw = (Math.random() * 360 - 180) * (Math.PI / 180);
-            const pitch = (Math.random() * 90 - 45) * (Math.PI / 180);
-            bot.look(yaw, pitch, true);
-        }, 12000);
-
-        setInterval(() => {
-            if (!bot.entity) return;
-            const actions = ['forward', 'back', 'sneak', 'jump'];
-            const randomAction = actions[Math.floor(Math.random() * actions.length)];
-            
-            if (randomAction === 'jump') {
-                bot.setControlState('jump', true);
-                setTimeout(() => bot.setControlState('jump', false), 400);
-            } else if (randomAction === 'sneak') {
-                bot.setControlState('sneak', true);
-                setTimeout(() => bot.setControlState('sneak', false), 2000);
-            } else {
-                bot.setControlState(randomAction, true);
-                setTimeout(() => bot.setControlState(randomAction, false), 300);
-            }
-        }, 35000);
-
-        setInterval(() => {
-            bot.chat("Keeping the world awake! ☀️");
-        }, 300000);
+        version: '26.1.2', // Keep this set to your server version
+        checkTimeoutInterval: 15000 
     });
 
-    bot.on('end', () => {
-        console.log('🔌 Disconnected from Aternos. Attempting revive in 20 seconds...');
-        setTimeout(createBot, 20000);
+    // CRITICAL: This will tell us exactly why it disconnects
+    bot.on('kicked', (reason) => {
+        console.log('❌ BOT KICKED BY SERVER. Reason JSON:', reason);
     });
 
     bot.on('error', (err) => {
-        console.log('❌ CRITICAL ERROR:', err.message);
+        console.log('❌ BOT ERROR:', err);
+    });
+
+    bot.on('spawn', () => {
+        console.log('🤖 Bot has successfully joined!');
+        bot.chat("I have arrived!");
+    });
+
+    bot.on('end', () => {
+        console.log('🔌 Disconnected. Retrying in 20 seconds...');
+        setTimeout(createBot, 20000);
     });
 }
 
